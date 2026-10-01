@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>майя</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@600;700;800;900&display=swap">
+<link rel="stylesheet" href="app.css?v=2">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="config.js?v=2"></script>
+</head>
+<body>
+<header class="top">
+  <div class="logo">майя</div>
+  <div class="status" id="status"></div>
+</header>
+<main class="wrap" id="app">
+  <div class="loading"><span class="stk big bounce" style="--bg:var(--yellow);--fg:var(--berry)">мур</span><p>майя считает~</p></div>
+</main>
+<div class="toast" id="toast" hidden></div>
+<nav class="tabs" id="tabs">
+  <button data-tab="home"><i>🏠</i>дом</button>
+  <button data-tab="disk"><i>💽</i>диск</button>
+  <button data-tab="procs"><i>⚙️</i>процессы</button>
+  <button data-tab="security"><i>🛡</i>защита</button>
+  <button data-tab="apps"><i>📦</i>проги</button>
+  <button data-tab="history"><i>📈</i>история</button>
+</nav>
+<script src="app.js?v=2"></script>
+</body>
+</html>
