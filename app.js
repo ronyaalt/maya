@@ -254,6 +254,22 @@
     return '<div class="a' + (a.got ? ' got' : '') + '">' + stk(a.st, a.bg, 'var(--cocoa)', i % 2 ? 4 : -5) + '<p>' + esc(a.d) + '</p></div>';
   }
 
+  // ачивки самой майи (kirza-kit): приходят в снимке как s.maya
+  function mayaAchCard() {
+    var m = snap().maya;
+    if (!m || !m.achievements) return '';
+    var list = m.achievements, got = list.filter(function (a) { return a.open; }).length, c = m.counters || {};
+    var counters = [['ходов', c.turns], ['с матом', c.mats], ['халяль', c.halal], ['переобулась', c.shoes], ['падений', c.fails], ['кай энджел', c.kai]]
+      .map(function (x) { return '<span class="chip">' + esc(x[0]) + ' ' + num(x[1] || 0, 0) + '</span>'; }).join('');
+    return '<section class="card tilt-l"><h2>🧚 ачивки майи <small>' + got + ' из ' + list.length + '</small></h2>' +
+      '<div class="chips" style="margin-bottom:12px">' + counters + '</div>' +
+      '<div class="ach maya">' + list.map(function (a, i) {
+        var prog = a.open ? '' : '<p class="muted">' + num(Math.min(a.have, a.need), 0) + ' / ' + num(a.need, 0) + '</p>';
+        return '<div class="a' + (a.open ? ' got' : '') + '">' + stk(a.emoji + ' ' + a.title, PALETTE[i % PALETTE.length], 'var(--cocoa)', i % 2 ? 4 : -5) +
+          '<p>' + esc(a.text) + '</p>' + prog + '</div>';
+      }).join('') + '</div></section>';
+  }
+
   // ───────── рендер ─────────
 
   function setTab(t) {
@@ -628,7 +644,8 @@
         }).join('') + '</div>' : '<p class="muted">ещё ни одной чистки</p>') +
       '</section>' +
       '<section class="card"><h2>✨ ачивки <small>' + ach.filter(function (a) { return a.got; }).length + ' из ' + ach.length + '</small></h2>' +
-        '<div class="ach">' + ach.map(achCard).join('') + '</div></section>';
+        '<div class="ach">' + ach.map(achCard).join('') + '</div></section>' +
+      mayaAchCard();
   }
 
   function chartCard(title, pts, series, minV, maxV, fmt, cls) {
