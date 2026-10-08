@@ -7,7 +7,7 @@
   var API = window.MAYA_API || '';
   var Q = new URLSearchParams(location.search);
   var DEMO = Q.has('demo');
-  var TABS = ['home', 'disk', 'procs', 'security', 'apps', 'history'];
+  var TABS = ['home', 'pet', 'disk', 'procs', 'security', 'apps', 'history'];
 
   var app = document.getElementById('app');
   var statusEl = document.getElementById('status');
@@ -270,6 +270,26 @@
       }).join('') + '</div></section>';
   }
 
+  // --- майя-тамагочи ---
+
+  function viewPet() {
+    var m = snap().maya || {}, p = m.pet;
+    if (!p) return '<section class="card"><h2>🐾 майя</h2><p class="sub">ноут ещё не прислал, как я там. загляни через пару минут, ня</p></section>';
+    function bar(label, v, c) {
+      return '<div class="pet-bar"><span>' + label + '</span><div class="track"><i style="width:' + Math.max(3, v) + '%;background:' + c + '"></i></div><b>' + num(v, 0) + '</b></div>';
+    }
+    var sleepBtn = p.sleeping ? '<button class="btn soft" data-pet="wake">☀️ разбудить</button>' : '<button class="btn soft" data-pet="sleep">😴 уложить</button>';
+    return '<section class="card pet-card">' +
+        '<div class="pet-stage"><img class="pet-sprite' + (p.face === 'sleepy' ? ' slow' : '') + '" src="pet/' + esc(p.face) + '.png?v=1" alt="майя"></div>' +
+        '<h2 style="text-align:center">' + esc(p.text) + '</h2>' +
+        bar('🍣 сытость', p.food, 'var(--peach)') + bar('💖 настроение', p.mood, 'var(--rose)') + bar('⚡ энергия', p.energy, 'var(--sky)') +
+        '<div class="btns" style="justify-content:center;margin-top:14px">' +
+          '<button class="btn" data-pet="feed">🍣 покормить</button><button class="btn" data-pet="pet">🤲 погладить</button>' + sleepBtn +
+        '</div>' +
+        '<p class="muted" style="text-align:center;margin-top:10px">покормили: ' + num(p.fed || 0, 0) + ' · погладили: ' + num(p.petted || 0, 0) + '</p>' +
+      '</section>' + mayaAchCard();
+  }
+
   // ───────── рендер ─────────
 
   function setTab(t) {
@@ -304,7 +324,7 @@
         '<p>ноут ещё не присылал данные</p><div class="card">задача снимков отправляет их раз в 5 минут. если ноут включён - загляни чуть позже, ня</div></div>';
       return;
     }
-    var html = ({ home: viewHome, disk: viewDisk, procs: viewProcs, security: viewSecurity, apps: viewApps, history: viewHistory }[tab])();
+    var html = ({ home: viewHome, pet: viewPet, disk: viewDisk, procs: viewProcs, security: viewSecurity, apps: viewApps, history: viewHistory }[tab])();
     app.innerHTML = html;
     bindView();
   }
@@ -644,8 +664,7 @@
         }).join('') + '</div>' : '<p class="muted">ещё ни одной чистки</p>') +
       '</section>' +
       '<section class="card"><h2>✨ ачивки <small>' + ach.filter(function (a) { return a.got; }).length + ' из ' + ach.length + '</small></h2>' +
-        '<div class="ach">' + ach.map(achCard).join('') + '</div></section>' +
-      mayaAchCard();
+        '<div class="ach">' + ach.map(achCard).join('') + '</div></section>';
   }
 
   function chartCard(title, pts, series, minV, maxV, fmt, cls) {
@@ -700,6 +719,12 @@
       b.addEventListener('click', function () {
         var full = b.dataset.refresh === '1';
         sendCmd('refresh', { full: full }, full ? 'полный пересчёт' : 'обновление');
+      });
+    });
+    app.querySelectorAll('[data-pet]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var labels = { feed: 'покормить майю', pet: 'погладить майю', sleep: 'уложить майю', wake: 'разбудить майю' };
+        sendCmd('pet', { action: b.dataset.pet }, labels[b.dataset.pet]);
       });
     });
     app.querySelectorAll('[data-goto]').forEach(function (b) { b.addEventListener('click', function () { setTab(b.dataset.goto); }); });

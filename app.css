@@ -178,12 +178,12 @@ h2,h3,.head{font-family:var(--head); font-weight:800; line-height:1.05; margin:0
 
 /* ───── нижняя панель ───── */
 .tabs{
-  position:fixed; left:0; right:0; bottom:0; z-index:20; display:grid; grid-template-columns:repeat(6,1fr);
+  position:fixed; left:0; right:0; bottom:0; z-index:20; display:grid; grid-template-columns:repeat(7,1fr);
   background:var(--milk); border-top:3px solid var(--cocoa); padding:5px 4px calc(5px + env(safe-area-inset-bottom));
 }
 .tabs button{
   border:0; background:none; display:flex; flex-direction:column; align-items:center; gap:1px; padding:4px 0 3px;
-  font-family:var(--head); font-weight:800; font-size:11px; border-radius:12px;
+  font-family:var(--head); font-weight:800; font-size:10px; border-radius:12px; min-width:0; overflow:hidden; text-overflow:ellipsis;
 }
 .tabs button i{font-style:normal; font-size:19px; line-height:1.1}
 .tabs button.on{background:var(--rose)}
@@ -204,3 +204,13 @@ h2,h3,.head{font-family:var(--head); font-weight:800; line-height:1.05; margin:0
 .warnbox{background:var(--yellow); border:2.5px solid var(--cocoa); border-radius:12px; padding:9px 11px; font-size:13px; margin-bottom:10px}
 
 @media (prefers-reduced-motion:reduce){ .bounce{animation:none} }
+
+/* майя-тамагочи */
+.pet-stage{display:flex; justify-content:center; padding:8px 0 4px}
+.pet-sprite{width:192px; height:auto; image-rendering:pixelated; animation:pet-breathe 1.2s steps(1) infinite}
+.pet-sprite.slow{animation-duration:2.4s}
+@keyframes pet-breathe{0%{transform:translateY(0)} 50%{transform:translateY(-4px)}}
+.pet-bar{display:grid; grid-template-columns:118px 1fr 32px; align-items:center; gap:8px; margin:6px 0; font-weight:700}
+.pet-bar .track{height:12px; border-radius:6px; background:rgba(0,0,0,.08); overflow:hidden}
+.pet-bar .track i{display:block; height:100%; border-radius:6px}
+.pet-bar b{text-align:right; font-variant-numeric:tabular-nums}
