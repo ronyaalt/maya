@@ -207,7 +207,7 @@ h2,h3,.head{font-family:var(--head); font-weight:800; line-height:1.05; margin:0
 
 /* майя-тамагочи */
 .pet-stage{display:flex; justify-content:center; padding:8px 0 4px}
-.pet-sprite{width:192px; height:auto; image-rendering:pixelated; animation:pet-breathe 1.2s steps(1) infinite}
+.pet-sprite{width:208px; height:auto; image-rendering:pixelated; animation:pet-breathe 1.2s steps(1) infinite}
 .pet-sprite.slow{animation-duration:2.4s}
 @keyframes pet-breathe{0%{transform:translateY(0)} 50%{transform:translateY(-4px)}}
 .pet-bar{display:grid; grid-template-columns:118px 1fr 32px; align-items:center; gap:8px; margin:6px 0; font-weight:700}

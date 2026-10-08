@@ -280,7 +280,7 @@
     }
     var sleepBtn = p.sleeping ? '<button class="btn soft" data-pet="wake">☀️ разбудить</button>' : '<button class="btn soft" data-pet="sleep">😴 уложить</button>';
     return '<section class="card pet-card">' +
-        '<div class="pet-stage"><img class="pet-sprite' + (p.face === 'sleepy' ? ' slow' : '') + '" src="pet/' + esc(p.face) + '.png?v=1" alt="майя"></div>' +
+        '<div class="pet-stage"><img class="pet-sprite' + (p.face === 'sleepy' ? ' slow' : '') + '" src="pet/' + esc(p.face) + '.png?v=2" alt="майя"></div>' +
         '<h2 style="text-align:center">' + esc(p.text) + '</h2>' +
         bar('🍣 сытость', p.food, 'var(--peach)') + bar('💖 настроение', p.mood, 'var(--rose)') + bar('⚡ энергия', p.energy, 'var(--sky)') +
         '<div class="btns" style="justify-content:center;margin-top:14px">' +
