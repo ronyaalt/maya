@@ -280,14 +280,36 @@
     }
     var sleepBtn = p.sleeping ? '<button class="btn soft" data-pet="wake">☀️ разбудить</button>' : '<button class="btn soft" data-pet="sleep">😴 уложить</button>';
     return '<section class="card pet-card">' +
-        '<div class="pet-stage"><img class="pet-sprite' + (p.face === 'sleepy' ? ' slow' : '') + '" src="pet/' + esc(p.face) + '.png?v=2" alt="майя"></div>' +
+        '<div class="pet-stage"><img class="pet-sprite' + (p.face === 'sleepy' ? ' slow' : '') + '" src="' + ((m.wardrobe && m.wardrobe.face) || ('pet/' + esc(p.face) + '.png?v=2')) + '" alt="майя"></div>' +
         '<h2 style="text-align:center">' + esc(p.text) + '</h2>' +
         bar('🍣 сытость', p.food, 'var(--peach)') + bar('💖 настроение', p.mood, 'var(--rose)') + bar('⚡ энергия', p.energy, 'var(--sky)') +
         '<div class="btns" style="justify-content:center;margin-top:14px">' +
           '<button class="btn" data-pet="feed">🍣 покормить</button><button class="btn" data-pet="pet">🤲 погладить</button>' + sleepBtn +
         '</div>' +
         '<p class="muted" style="text-align:center;margin-top:10px">покормили: ' + num(p.fed || 0, 0) + ' · погладили: ' + num(p.petted || 0, 0) + '</p>' +
-      '</section>' + mayaAchCard();
+      '</section>' + wardrobeCard(m.wardrobe) + mayaAchCard();
+  }
+
+  // гардероб: тап по наряду — закрепить, «одевайся сама» — снять закрепление; новые от садовницы ждут халяль
+  function wardrobeCard(w) {
+    if (!w || !w.outfits || !w.outfits.length) return '';
+    var cur = null;
+    w.outfits.forEach(function (o) { if (o.id === w.current) cur = o; });
+    var tiles = w.outfits.map(function (o) {
+      var cls = 'wd' + (o.id === w.current ? ' on' : '') + (o.status === 'pending' ? ' new' : '');
+      var mark = o.id === w.pinned ? '📌 ' : (o.id === w.current ? '• ' : '');
+      var foot = o.status === 'pending'
+        ? '<div class="wd-ask"><button class="btn" data-outfit-pack="ok" data-pack="' + esc(o.pack) + '" title="халяль">✅</button><button class="btn soft" data-outfit-pack="no" data-pack="' + esc(o.pack) + '">🗑</button></div>'
+        : '';
+      return '<div class="' + cls + '"' + (o.status === 'pending' ? '' : ' data-outfit="' + esc(o.id) + '" data-title="' + esc(o.title) + '"') + '>' +
+        (o.img ? '<img src="' + o.img + '" alt="">' : '<div class="wd-noimg">👗</div>') +
+        '<p>' + mark + esc(o.title) + '</p>' + foot + '</div>';
+    }).join('');
+    return '<section class="card"><h2>👗 гардероб</h2>' +
+      '<p class="sub">сейчас на мне: <b>' + esc(cur ? cur.title : 'родное худи') + '</b>' + (w.pinned ? ' 📌' : '') + '. ' +
+        (w.pinned ? 'закреплено, не переодеваюсь.' : 'одеваюсь сама: по погоде, сезону, времени и праздникам.') + '</p>' +
+      (w.pinned ? '<div class="btns" style="margin:8px 0 12px"><button class="btn soft" data-outfit-auto="1">🎲 одевайся сама</button></div>' : '') +
+      '<div class="wardrobe">' + tiles + '</div></section>';
   }
 
   // ───────── рендер ─────────
@@ -725,6 +747,19 @@
       b.addEventListener('click', function () {
         var labels = { feed: 'покормить майю', pet: 'погладить майю', sleep: 'уложить майю', wake: 'разбудить майю' };
         sendCmd('pet', { action: b.dataset.pet }, labels[b.dataset.pet]);
+      });
+    });
+    app.querySelectorAll('[data-outfit]').forEach(function (b) {
+      b.addEventListener('click', function () { sendCmd('outfit', { action: 'wear', id: b.dataset.outfit }, 'надеть «' + b.dataset.title + '»'); });
+    });
+    app.querySelectorAll('[data-outfit-auto]').forEach(function (b) {
+      b.addEventListener('click', function () { sendCmd('outfit', { action: 'auto' }, 'одеваться самой'); });
+    });
+    app.querySelectorAll('[data-outfit-pack]').forEach(function (b) {
+      b.addEventListener('click', function (ev) {
+        ev.stopPropagation();
+        var ok = b.dataset.outfitPack === 'ok';
+        sendCmd('outfit', { action: ok ? 'ok' : 'no', id: b.dataset.pack }, ok ? 'наряд в гардероб' : 'выселить наряд');
       });
     });
     app.querySelectorAll('[data-goto]').forEach(function (b) { b.addEventListener('click', function () { setTab(b.dataset.goto); }); });

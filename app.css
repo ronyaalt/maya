@@ -214,3 +214,15 @@ h2,h3,.head{font-family:var(--head); font-weight:800; line-height:1.05; margin:0
 .pet-bar .track{height:12px; border-radius:6px; background:rgba(0,0,0,.08); overflow:hidden}
 .pet-bar .track i{display:block; height:100%; border-radius:6px}
 .pet-bar b{text-align:right; font-variant-numeric:tabular-nums}
+
+/* гардероб майи */
+.wardrobe{display:grid; grid-template-columns:repeat(auto-fill,minmax(96px,1fr)); gap:10px}
+.wd{text-align:center; padding:8px 4px 6px; border:2.5px solid rgba(69,50,48,.18); border-radius:14px; cursor:pointer; transition:transform .12s}
+.wd:active{transform:scale(.96)}
+.wd.on{border-color:var(--cocoa); background:var(--cream)}
+.wd.new{border-style:dashed; border-color:var(--rose); cursor:default}
+.wd img{width:78px; height:auto; image-rendering:pixelated; display:block; margin:0 auto 4px}
+.wd .wd-noimg{font-size:40px; line-height:80px}
+.wd p{margin:0; font-size:12px; font-weight:700; line-height:1.2}
+.wd-ask{display:flex; gap:4px; justify-content:center; margin-top:6px}
+.wd-ask .btn{padding:4px 12px; font-size:14px; min-width:0}
